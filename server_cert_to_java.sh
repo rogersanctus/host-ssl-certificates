@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -euo pipefail # exit on errors
 
 #
 # This script may be run as a sudo user when needed

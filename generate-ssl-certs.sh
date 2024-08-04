@@ -6,13 +6,9 @@ if [ -f "vars.sh" ]; then
   source vars.sh
 fi
 
-# Check if KEY_PASSWORD is set, if not exit
-if [ -z "$KEY_PASSWORD" ]; then
-  echo "KEY_PASSWORD is not set, exiting..."
-  exit 1
-fi
+set -euo pipefail # exit on errors
 
-DOMAIN="${DOMAIN:-supra-dev.com}"
+DOMAIN="${DOMAIN:-'supra-dev.com'}"
 COUNTRY="${COUNTRY:-BR}"
 STATE="${STATE:-GO}"
 CITY="${CITY:-Brasilia}"
@@ -20,7 +16,6 @@ ORG="${ORG:-SupraDev}"
 ORG_UNIT="${ORG_UNIT:-SupraDev Desenvolvimento de Sistemas}"
 CN="${CN:-*.${DOMAIN}}"
 
-# CA_SUBJECT="/C=BR/ST=BA/L=Salvador/O=SupraDev/OU=SupraDev Desenvolvimento de Sistemas/CN=supra-dev.com"
 CA_SUBJECT="/C=${COUNTRY}/ST=${STATE}/L=${CITY}/O=${ORG}/OU=${ORG_UNIT}/CN=${CN}"
 
 echo "CA_SUBJECT: $CA_SUBJECT"
