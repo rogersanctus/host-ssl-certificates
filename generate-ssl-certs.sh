@@ -16,6 +16,9 @@ ORG="${ORG:-SupraDev}"
 ORG_UNIT="${ORG_UNIT:-SupraDev Desenvolvimento de Sistemas}"
 CN="${CN:-*.${DOMAIN}}"
 
+CA_EXPIRES_IN_DAYS=$((10 * 365)) # 10 years
+SERVER_EXPIRES_IN_DAYS=$((2 * 365)) # 2 years
+
 CA_SUBJECT="/C=${COUNTRY}/ST=${STATE}/L=${CITY}/O=${ORG}/OU=${ORG_UNIT}/CN=${CN}"
 
 echo "CA_SUBJECT: $CA_SUBJECT"
@@ -57,7 +60,7 @@ openssl genrsa -des3 -passout pass:$KEY_PASSWORD -out ${DOMAIN}_ca.key 2048
 
 # Generate a 10 years root certificate for $DOMAIN
 echo "Generating the root certificate for the Certificate Authority..."
-openssl req -x509 -new -nodes -key ${DOMAIN}_ca.key -passin pass:$KEY_PASSWORD -sha256 -days 3650 -out ${DOMAIN}_ca.crt -subj "$CA_SUBJECT"
+openssl req -x509 -new -nodes -key ${DOMAIN}_ca.key -passin pass:$KEY_PASSWORD -sha256 -days $CA_EXPIRES_IN_DAYS -out ${DOMAIN}_ca.crt -subj "$CA_SUBJECT"
 
 # Generate the private key for the server without password and without interactive input
 echo "Generating the private key for the server..."
@@ -69,4 +72,4 @@ openssl req -new -key ${DOMAIN}_server.key -out ${DOMAIN}_server.csr -subj "$CA_
 
 # Generate the certificate for the server using the $EXT_CONTENT and without interactive input
 echo "Generating the certificate for the server..."
-openssl x509 -req -in ${DOMAIN}_server.csr -CA ${DOMAIN}_ca.crt -CAkey ${DOMAIN}_ca.key -CAcreateserial -out ${DOMAIN}_server.crt -days 365 -sha256 -extfile <(echo "$EXT_CONTENT") -passin pass:$KEY_PASSWORD
+openssl x509 -req -in ${DOMAIN}_server.csr -CA ${DOMAIN}_ca.crt -CAkey ${DOMAIN}_ca.key -CAcreateserial -out ${DOMAIN}_server.crt -days $SERVER_EXPIRES_IN_DAYS -sha256 -extfile <(echo "$EXT_CONTENT") -passin pass:$KEY_PASSWORD
