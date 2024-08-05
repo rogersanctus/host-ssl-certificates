@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# This script will be run as 'root' at startup
+# This script must be run as 'root' at startup
 #
 
 DOMAIN="${DOMAIN:-supra-dev.com}"
