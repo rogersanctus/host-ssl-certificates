@@ -23,7 +23,7 @@ echo -e "\nPKCS12 file created: ${DOMAIN}_server.p12. It can be copied/moved to 
 # First check if the alias is in the cacerts store
 if keytool -list -cacerts -alias ${DOMAIN}_ca; then
   echo -e "\n$DOMAIN CA certificate already in Java cacerts. It will be replaced by the new one..."
-  keytool -delete -alias ${DOMAIN}_ca -cacerts # -storepass $KEY_PASSWORD
+  keytool -delete -alias ${DOMAIN}_ca -cacerts
 fi
 
 echo -e "\nAdding $DOMAIN CA certificate to Java cacerts..."
